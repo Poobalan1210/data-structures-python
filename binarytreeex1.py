@@ -1,36 +1,34 @@
 class binarytree:
+
     def __init__(self, data):
         self.data = data
         self.right = None
         self.left = None
 
     def addchild(self, data):
-        if self.data == data:
-            return
-        elif self.data > data:
+
+        if data < self.data:
             if self.left:
                 self.left.addchild(data)
             else:
                 self.left = binarytree(data)
-        else:
+        elif data > self.data:
             if self.right:
                 self.right.addchild(data)
             else:
                 self.right = binarytree(data)
-
-    def search(self, data):
-        if self.data == data:
-            return True
-        elif self.data > data:
-            if self.left:
-                return self.left.search(data)
-            else:
-                return False
         else:
-            if self.right:
-                return self.right.search(data)
-            else:
-                return False
+            return
+
+    def find_max(self):
+        if self.right is None:
+            return self.data
+        return self.right.find_max()
+
+    def find_min(self):
+        if self.left is None:
+            return self.data
+        return self.left.find_min()
 
     def inorder(self):
         output = []
@@ -48,7 +46,6 @@ class binarytree:
             output += self.left.preorder()
         if self.right:
             output += self.right.preorder()
-
         return output
 
     def postorder(self):
@@ -58,27 +55,29 @@ class binarytree:
         if self.right:
             output += self.right.postorder()
         output.append(self.data)
-
         return output
+
+    def calculatesum(self):
+        value = self.inorder()
+        return sum(value)
 
 
 def buildtree(elements):
-    print("Printing trees with elements", elements)
+    print("Building tree with elements", elements)
     root = binarytree(elements[0])
 
-    for _ in range(1, len(elements)):
-        root.addchild(elements[_])
+    for i in range(1, len(elements)):
+        root.addchild(elements[i])
 
     return root
 
 
 if __name__ == "__main__":
-    names = ['poobalan', 'sai', 'kishore', 'sugash']
-    name_tree = buildtree(names)
-    print(name_tree.search('poobalan'))
-    print(name_tree.inorder())
-
-    numbers = [5, 3, 4, 9, 8, 3]
-    number_tree = buildtree((numbers))
-    print(number_tree.preorder())
-    print(number_tree.search(10))
+    numbers = [5, 6, 6, 9, 7, 3]
+    number_tree = buildtree(numbers)
+    print("Inorder traversal is ", number_tree.inorder())
+    print("Preorder traversal is ", number_tree.preorder())
+    print("Postorder traversal is ", number_tree.postorder())
+    print("Maximum no is ", number_tree.find_max())
+    print("Minimum no is ", number_tree.find_min())
+    print("Total sum is ", number_tree.calculatesum())
